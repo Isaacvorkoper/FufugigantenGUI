@@ -9,7 +9,11 @@
         <th>Edit</th>
         <th>Delete</th>
       </tr>
-      <MyTable v-for="manufacturer in manufacturers" :key="manufacturer.manufacturerId" :manufacturer="manufacturer"/>
+      <MyTable v-for="manufacturer in manufacturers" 
+      :key="manufacturer.manufacturerId" 
+      :manufacturer="manufacturer"
+      @update-event="updated"
+      @delete-event="deleted"/>
     </table>
   </div>
 </template>
@@ -40,16 +44,32 @@ export default {
   async created() {
     const config = {
       headers: {
+        'Authorization': 'Basic ' + btoa('test:test'),
+        'content-type': 'application/json',
         'Accept': 'application/json'
-      }
+      } 
     }
     try {
-      const res = await this.$axios.get('https://localhost:44319/api/Manufacturers', config);
+      const res = await this.$axios.get('https://localhost:44319/api/Manufacturers', config)
+      
       console.log(res.data)
-      this.manufacturers = res.data;
+      this.manufacturers = res.data
     } catch (err) {
       console.log(err)
     }
+  },
+  methods: {
+    deleted(manufacturerId){
+      this.manufacturers = this.manufacturers.filter(
+        (manufacturer) => manufacturer.manufacturerId !== manufacturerId
+      )
+    },
+    updated(updatedManufacturer) {
+      this.manufacturers.find(
+        (manufacturer) =>
+          manufacturer.manufacturerId === updatedManufacturer.manufacturerId
+      ).name = updatedManufacturer.name
+    },
   }
 };
 </script>

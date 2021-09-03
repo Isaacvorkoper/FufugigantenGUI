@@ -42,4 +42,3 @@ ul {
   background: #fff;
 }
 </style>
-© 2021 GitHub, Inc.
