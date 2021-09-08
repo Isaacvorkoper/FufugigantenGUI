@@ -63,6 +63,7 @@ methods: {
           }
         },
       })
+      
       if (updatedManufacturer) {
         this.$axios
           .put('https://localhost:44319/api/Manufacturers', {
